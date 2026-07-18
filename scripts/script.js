@@ -12,7 +12,36 @@ let gameBoard = (function(){
 })();
 
 // Create player objects
+const playerFactory = function(name) {
+    let score = 0;
 
+    let getPlayerName = function(){
+        return `Player name: ${name}`;
+    }
+
+    let increasePlayerPoints = function(){
+        return ++score;
+    }
+
+    let getPlayerScore = function(){
+        return `Player Score: ${score}`;
+    }
+
+    let victory = function(){
+        let nameToUpperCase = name.toUpperCase();
+        return `${nameToUpperCase} is the winner with ${score} points!`;
+    }
+
+    return {
+        getPlayerName,
+        increasePlayerPoints,
+        getPlayerScore,
+        victory,
+    }
+}
+
+let playerOne = playerFactory("Bobby");
+let playerTwo = playerFactory("ybboB");
 
 //let secondPlayer = playerFactory("Sammy");
 //console.log(secondPlayer.getPlayerInfo());
