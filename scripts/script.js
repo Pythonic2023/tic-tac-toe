@@ -1,16 +1,21 @@
 // Make gameboard a IIFE so another instance cannot be made.
 let gameBoard = (function(){
     const gameBoardArray = []
+    let count = 1;
 
-    for(let i = 0; i < 9; i++){
-        gameBoardArray.push([]);
+    for(let i = 0; i < 9; i+=3){
+        gameBoardArray.push({row: count, sectionA: "a", sectionB: "b", sectionC: "c"});
+        count += 1;
     }
 
     return {gameBoardArray};
 })();
 
-
 // Create player objects
+
+
+//let secondPlayer = playerFactory("Sammy");
+//console.log(secondPlayer.getPlayerInfo());
 
 // FNCTION createPlayer
     // attributes defining player such as name
