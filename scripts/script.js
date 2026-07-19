@@ -27,6 +27,11 @@ const playerFactory = function(name) {
         return `Player Score: ${score}`;
     }
 
+    let playerMove = function() {
+        let move = prompt("Pick move: row 1, 2 or 3 then a, b or c. For example 1a.");
+        return move;
+    }
+
     let victory = function(){
         let nameToUpperCase = name.toUpperCase();
         return `${nameToUpperCase} is the winner with ${score} points!`;
@@ -37,18 +42,12 @@ const playerFactory = function(name) {
         increasePlayerPoints,
         getPlayerScore,
         victory,
+        playerMove,
     }
 }
 
 let playerOne = playerFactory("Bobby");
 let playerTwo = playerFactory("ybboB");
-
-//let secondPlayer = playerFactory("Sammy");
-//console.log(secondPlayer.getPlayerInfo());
-
-// FNCTION createPlayer
-    // attributes defining player such as name
-    // return player object 
 
 // Create object to control flow of game
 
@@ -56,4 +55,3 @@ let playerTwo = playerFactory("ybboB");
         // listen for user input
         // fill array with user input
         // update if either row is full of x or o and continue if not. if all spots are filled and neither contain full row make a tie.
-
