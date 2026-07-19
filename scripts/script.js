@@ -49,33 +49,34 @@ const playerFactory = function(name) {
 let playerOne = playerFactory("Bobby");
 let playerTwo = playerFactory("ybboB");
 
-// Create object to control flow of game
+let playerChoice = function(playerObject){
+    let playerMove = playerObject.playerMove().split("");
+    let rowPick = playerMove[0];
+    let cellPick = playerMove[1];
+    return {rowPick, cellPick};
+}
 
-    // FNCTION playGame
-        // listen for user input
-        // fill array with user input
-        // update if either row is full of x or o and continue if not. if all spots are filled and neither contain full row make a tie.
+// Create object to control flow of game
+// We will start game with this, creating a welcome message. Retrieve player choices by passing player objects to playerChoice.
+// Return a choice object back indicating row and column/cell. 
+// From here we should have a function to update our gameboard object.
+// NOTE: In our function to update gameboard, see if it has already been set to a value. If not, add player choice.
 let startGame = (function(){
     console.log("Welcome to Tic Tac Toe!")
     console.log(`${playerOne.getPlayerName()}`);
     console.log(`${playerTwo.getPlayerName()}`);
     // Retreive player moves
+    let playerOneChoice = playerChoice(playerOne);
+    let playerTwoChoice = playerChoice(playerTwo)
 
-    let playerOneMove = playerOne.playerMove().split("");
-    let rowPick = playerOneMove[0];
-    let cellPick = playerOneMove[1];
-
-    let row = gameBoard.gameBoardArray[rowPick];
-    console.log(row);
+    let row = gameBoard.gameBoardArray[playerOneChoice.rowPick];
+    //console.log(row);
     
     let keys = Object.keys(row);
     keys.forEach(key => {
-        console.log(key === key);
+        if(key === playerOneChoice.cellPick){
+            gameBoard.gameBoardArray[playerOneChoice.rowPick][key] = "X";
+            console.log(gameBoard.gameBoardArray);
+        }
     });
-    
-    // Apply their choices to the gameBoard object, only if someone has not picked the spot already.
-
-    // HOW I CAN ACCESS THE OBJECTS ARRAY AND PROPERTIES
-    //console.log(gameBoard.gameBoardArray[1].sectionA);
-
 }());
