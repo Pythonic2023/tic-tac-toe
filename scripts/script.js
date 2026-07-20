@@ -1,11 +1,9 @@
 // Make gameboard a IIFE so another instance cannot be made.
 let gameBoard = (function(){
     const gameBoardArray = []
-    let count = 1;
 
-    for(let i = 0; i < 9; i+=3){
-        gameBoardArray.push({row: count, a:"", b:"", c: ""});
-        count += 1;
+    for(let i = 1; i < 4; i++){
+        gameBoardArray.push({row: i, a:"", b:"", c: ""});
     }
 
     return {gameBoardArray};
@@ -14,6 +12,7 @@ let gameBoard = (function(){
 // Create player objects
 const playerFactory = function(name) {
     let score = 0;
+    let playerID = crypto.randomUUID();
 
     let getPlayerName = function(){
         return `Player name: ${name}`;
@@ -56,11 +55,10 @@ let playerChoice = function(playerObject){
     return {rowPick, cellPick};
 }
 
-// Create object to control flow of game
-// We will start game with this, creating a welcome message. Retrieve player choices by passing player objects to playerChoice.
-// Return a choice object back indicating row and column/cell. 
-// From here we should have a function to update our gameboard object.
-// NOTE: In our function to update gameboard, see if it has already been set to a value. If not, add player choice.
+let updateGameBoard = function(){
+    
+}
+
 let startGame = (function(){
     console.log("Welcome to Tic Tac Toe!")
     console.log(`${playerOne.getPlayerName()}`);
@@ -69,14 +67,19 @@ let startGame = (function(){
     let playerOneChoice = playerChoice(playerOne);
     let playerTwoChoice = playerChoice(playerTwo)
 
-    let row = gameBoard.gameBoardArray[playerOneChoice.rowPick];
-    //console.log(row);
-    
+    // row is the object number within our gameBoardArray
+    let row = gameBoard.gameBoardArray.at(playerOneChoice.rowPick -1);
+    console.log(row);
+
+    // Here we retrieve all the keys from the object row, chosen from the above.
     let keys = Object.keys(row);
+
+    //  Here we loop through the enumerable keys string and compare it against our cellPick (a,b,c).
     keys.forEach(key => {
         if(key === playerOneChoice.cellPick){
-            gameBoard.gameBoardArray[playerOneChoice.rowPick][key] = "X";
+            gameBoard.gameBoardArray.at([row])[key] = "X";
             console.log(gameBoard.gameBoardArray);
         }
     });
+
 }());
