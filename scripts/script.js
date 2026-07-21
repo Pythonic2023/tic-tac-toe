@@ -48,38 +48,19 @@ const playerFactory = function(name) {
 let playerOne = playerFactory("Bobby");
 let playerTwo = playerFactory("ybboB");
 
-let playerChoice = function(playerObject){
-    let playerMove = playerObject.playerMove().split("");
-    let rowPick = playerMove[0];
-    let cellPick = playerMove[1];
-    return {rowPick, cellPick};
+let playerChoice = function(playerObjects){
+    Object.entries(playerObjects).forEach(([name, player]) => {
+        let move = player.playerMove();
+    });
 }
 
 let updateGameBoard = function(){
-    
+    console.log('updateGameBoard');
 }
 
 let startGame = (function(){
     console.log("Welcome to Tic Tac Toe!")
     console.log(`${playerOne.getPlayerName()}`);
     console.log(`${playerTwo.getPlayerName()}`);
-    // Retreive player moves
-    let playerOneChoice = playerChoice(playerOne);
-    let playerTwoChoice = playerChoice(playerTwo)
-
-    // row is the object number within our gameBoardArray
-    let row = gameBoard.gameBoardArray.at(playerOneChoice.rowPick -1);
-    console.log(row);
-
-    // Here we retrieve all the keys from the object row, chosen from the above.
-    let keys = Object.keys(row);
-
-    //  Here we loop through the enumerable keys string and compare it against our cellPick (a,b,c).
-    keys.forEach(key => {
-        if(key === playerOneChoice.cellPick){
-            gameBoard.gameBoardArray.at([row])[key] = "X";
-            console.log(gameBoard.gameBoardArray);
-        }
-    });
-
+    playerChoice({playerOne, playerTwo});
 }());
