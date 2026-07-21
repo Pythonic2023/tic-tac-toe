@@ -1,11 +1,9 @@
 // Make gameboard a IIFE so another instance cannot be made.
 let gameBoard = (function(){
     const gameBoardArray = []
-    let count = 1;
 
-    for(let i = 0; i < 9; i+=3){
-        gameBoardArray.push({row: count, sectionA: "a", sectionB: "b", sectionC: "c"});
-        count += 1;
+    for(let i = 1; i < 4; i++){
+        gameBoardArray.push({row: i, a:"", b:"", c: ""});
     }
 
     return {gameBoardArray};
@@ -14,6 +12,7 @@ let gameBoard = (function(){
 // Create player objects
 const playerFactory = function(name) {
     let score = 0;
+    let playerID = crypto.randomUUID();
 
     let getPlayerName = function(){
         return `Player name: ${name}`;
@@ -49,9 +48,19 @@ const playerFactory = function(name) {
 let playerOne = playerFactory("Bobby");
 let playerTwo = playerFactory("ybboB");
 
-// Create object to control flow of game
+let playerChoice = function(playerObjects){
+    Object.entries(playerObjects).forEach(([name, player]) => {
+        let move = player.playerMove();
+    });
+}
 
-    // FNCTION playGame
-        // listen for user input
-        // fill array with user input
-        // update if either row is full of x or o and continue if not. if all spots are filled and neither contain full row make a tie.
+let updateGameBoard = function(){
+    console.log('updateGameBoard');
+}
+
+let startGame = (function(){
+    console.log("Welcome to Tic Tac Toe!")
+    console.log(`${playerOne.getPlayerName()}`);
+    console.log(`${playerTwo.getPlayerName()}`);
+    playerChoice({playerOne, playerTwo});
+}());
