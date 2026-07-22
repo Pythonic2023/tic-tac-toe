@@ -12,6 +12,7 @@ let gameBoard = (function(){
 // Create player objects
 const playerFactory = function(name) {
     let score = 0;
+    let symbol = ""
     let playerID = crypto.randomUUID();
 
     let getPlayerName = function(){
@@ -36,12 +37,22 @@ const playerFactory = function(name) {
         return `${nameToUpperCase} is the winner with ${score} points!`;
     }
 
+    let setSymbol = function(newSymbol){
+        symbol = newSymbol;
+    }
+
+    let getSymbol = function(){
+        return symbol;
+    }
+
     return {
         getPlayerName,
         increasePlayerPoints,
         getPlayerScore,
         victory,
         playerMove,
+        getSymbol,
+        setSymbol,
     }
 }
 
@@ -51,16 +62,33 @@ let playerTwo = playerFactory("ybboB");
 let playerChoice = function(playerObjects){
     Object.entries(playerObjects).forEach(([name, player]) => {
         let move = player.playerMove();
+        updateGameBoard(player, move);
     });
 }
 
-let updateGameBoard = function(){
-    console.log('updateGameBoard');
+let updateGameBoard = function(player, playerMove){
+    let [row, cell] = playerMove;
+    const arrayIndexOffset = row - 1;
+    if(gameBoard.gameBoardArray[arrayIndexOffset][cell] === ""){
+        gameBoard.gameBoardArray[arrayIndexOffset][cell] = player.getSymbol();
+    } else {
+        console.log("Already taken"); // Get players choice again. 
+    }
+    console.log(gameBoard.gameBoardArray);
+
+    if(player.getSymbol() === "o"){
+        continueGame();
+    }
+}
+
+let continueGame = function(){
+    playerChoice({playerOne, playerTwo});
 }
 
 let startGame = (function(){
+    [playerOne.symbol, playerTwo.symbol] = [playerOne.setSymbol("x"), playerTwo.setSymbol("o")];
     console.log("Welcome to Tic Tac Toe!")
-    console.log(`${playerOne.getPlayerName()}`);
-    console.log(`${playerTwo.getPlayerName()}`);
+    console.log(`${playerOne.getPlayerName()} Symbol: ${playerOne.getSymbol()}`);
+    console.log(`${playerTwo.getPlayerName()} Symbol: ${playerTwo.getSymbol()}`);
     playerChoice({playerOne, playerTwo});
 }());
