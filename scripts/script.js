@@ -37,8 +37,12 @@ const playerFactory = function(name) {
         return `${nameToUpperCase} is the winner with ${score} points!`;
     }
 
+    let setSymbol = function(newSymbol){
+        symbol = newSymbol;
+    }
+
     let getSymbol = function(){
-        console.log(symbol);
+        return symbol;
     }
 
     return {
@@ -48,6 +52,7 @@ const playerFactory = function(name) {
         victory,
         playerMove,
         getSymbol,
+        setSymbol,
     }
 }
 
@@ -57,25 +62,33 @@ let playerTwo = playerFactory("ybboB");
 let playerChoice = function(playerObjects){
     Object.entries(playerObjects).forEach(([name, player]) => {
         let move = player.playerMove();
-        updateGameBoard(move);
+        updateGameBoard(player, move);
     });
 }
 
-let updateGameBoard = function(playerMove){
+let updateGameBoard = function(player, playerMove){
     let [row, cell] = playerMove;
-    arrayIndexAlign = row - 1;
-    if(gameBoard.gameBoardArray[arrayIndexAlign][cell] === ""){
-        gameBoard.gameBoardArray[arrayIndexAlign][cell] = "X";
-        console.log(gameBoard.gameBoardArray);
+    const arrayIndexOffset = row - 1;
+    if(gameBoard.gameBoardArray[arrayIndexOffset][cell] === ""){
+        gameBoard.gameBoardArray[arrayIndexOffset][cell] = player.getSymbol();
     } else {
-        console.log("Already taken");
+        console.log("Already taken"); // Get players choice again. 
+    }
+    console.log(gameBoard.gameBoardArray);
+
+    if(player.getSymbol() === "o"){
+        continueGame();
     }
 }
 
+let continueGame = function(){
+    playerChoice({playerOne, playerTwo});
+}
+
 let startGame = (function(){
-    [playerOne.move, playerTwo.move] = ["x", "o"];
+    [playerOne.symbol, playerTwo.symbol] = [playerOne.setSymbol("x"), playerTwo.setSymbol("o")];
     console.log("Welcome to Tic Tac Toe!")
-    console.log(`${playerOne.getPlayerName()} Symbol: ${playerOne.move}`);
-    console.log(`${playerTwo.getPlayerName()} Symbol: ${playerTwo.move}`);
+    console.log(`${playerOne.getPlayerName()} Symbol: ${playerOne.getSymbol()}`);
+    console.log(`${playerTwo.getPlayerName()} Symbol: ${playerTwo.getSymbol()}`);
     playerChoice({playerOne, playerTwo});
 }());
