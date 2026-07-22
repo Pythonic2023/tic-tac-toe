@@ -12,6 +12,7 @@ let gameBoard = (function(){
 // Create player objects
 const playerFactory = function(name) {
     let score = 0;
+    let symbol = ""
     let playerID = crypto.randomUUID();
 
     let getPlayerName = function(){
@@ -36,12 +37,17 @@ const playerFactory = function(name) {
         return `${nameToUpperCase} is the winner with ${score} points!`;
     }
 
+    let getSymbol = function(){
+        console.log(symbol);
+    }
+
     return {
         getPlayerName,
         increasePlayerPoints,
         getPlayerScore,
         victory,
         playerMove,
+        getSymbol,
     }
 }
 
@@ -51,16 +57,25 @@ let playerTwo = playerFactory("ybboB");
 let playerChoice = function(playerObjects){
     Object.entries(playerObjects).forEach(([name, player]) => {
         let move = player.playerMove();
+        updateGameBoard(move);
     });
 }
 
-let updateGameBoard = function(){
-    console.log('updateGameBoard');
+let updateGameBoard = function(playerMove){
+    let [row, cell] = playerMove;
+    arrayIndexAlign = row - 1;
+    if(gameBoard.gameBoardArray[arrayIndexAlign][cell] === ""){
+        gameBoard.gameBoardArray[arrayIndexAlign][cell] = "X";
+        console.log(gameBoard.gameBoardArray);
+    } else {
+        console.log("Already taken");
+    }
 }
 
 let startGame = (function(){
+    [playerOne.move, playerTwo.move] = ["x", "o"];
     console.log("Welcome to Tic Tac Toe!")
-    console.log(`${playerOne.getPlayerName()}`);
-    console.log(`${playerTwo.getPlayerName()}`);
+    console.log(`${playerOne.getPlayerName()} Symbol: ${playerOne.move}`);
+    console.log(`${playerTwo.getPlayerName()} Symbol: ${playerTwo.move}`);
     playerChoice({playerOne, playerTwo});
 }());
