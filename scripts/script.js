@@ -78,11 +78,24 @@ let updateGameBoard = function(player, playerMove){
     } else {
         console.log("Already taken"); // Get players choice again. 
     }
-    console.log(gameBoard.gameBoardArray);
+    //console.log(gameBoard.gameBoardArray);
 }
 
 let continueGame = function(){
+    checkVictory();
     playerChoice({playerOne, playerTwo});
+}
+
+let checkVictory = function(){
+    let getRowSymbols = Object.values(gameBoard.gameBoardArray[0]).slice(1);
+    console.log(getRowSymbols);
+    /*
+    Object.values(gameBoard.gameBoardArray[0]).forEach(value => {
+        if(typeof value === "string" && value.length != 0){
+            console.log(`${value} is string`);
+        }
+    })
+    */
 }
 
 let startGame = (function(){
