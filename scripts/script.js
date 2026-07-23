@@ -63,6 +63,10 @@ let playerChoice = function(playerObjects){
     Object.entries(playerObjects).forEach(([name, player]) => {
         let move = player.playerMove();
         updateGameBoard(player, move);
+        
+        if(player.getSymbol() === "o"){
+            continueGame();
+        }
     });
 }
 
@@ -75,10 +79,6 @@ let updateGameBoard = function(player, playerMove){
         console.log("Already taken"); // Get players choice again. 
     }
     console.log(gameBoard.gameBoardArray);
-
-    if(player.getSymbol() === "o"){
-        continueGame();
-    }
 }
 
 let continueGame = function(){
