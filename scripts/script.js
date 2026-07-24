@@ -78,7 +78,6 @@ let updateGameBoard = function(player, playerMove){
     } else {
         console.log("Already taken"); // Get players choice again. 
     }
-    //console.log(gameBoard.gameBoardArray);
 }
 
 let continueGame = function(){
@@ -87,15 +86,20 @@ let continueGame = function(){
 }
 
 let checkVictory = function(){
-    let getRowSymbols = Object.values(gameBoard.gameBoardArray[0]).slice(1);
-    console.log(getRowSymbols);
-    /*
-    Object.values(gameBoard.gameBoardArray[0]).forEach(value => {
-        if(typeof value === "string" && value.length != 0){
-            console.log(`${value} is string`);
+    let gameBoardRowCount = gameBoard.gameBoardArray.length;
+
+    gameBoard.gameBoardArray.forEach(gameBoardRow => {
+        let getRowSymbols = Object.values(gameBoardRow).slice(1);
+        if(getRowSymbols.every(entry => entry === playerOne.getSymbol())){
+            playerOne.increasePlayerPoints();
+            console.log(playerOne.victory());
+            console.log(playerOne.getPlayerScore());
+        } else if(getRowSymbols.every(entry => entry === playerTwo.getSymbol())){
+            playerTwo.increasePlayerPoints();
+            console.log(playerTwo.victory());
+            console.log(playerTwo.getPlayerScore());
         }
-    })
-    */
+    });
 }
 
 let startGame = (function(){
