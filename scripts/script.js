@@ -79,7 +79,6 @@ let updateGameBoard = function(player, playerMove){
 }
 
 let continueGame = function(){
-    console.log(gameBoard.gameBoardArray);
     checkVictory();
     playerChoice({playerOne, playerTwo});
 }
@@ -106,8 +105,9 @@ let regenerateGameBoard = function(){
         let objectKeys = Object.keys(object).slice(1);
         objectKeys.forEach(key => {
             object[key] = "";
-        })
+        });
     });
+    playerChoice({playerOne, playerTwo});
 }
 
 let startGame = (function(){
