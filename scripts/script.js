@@ -63,11 +63,9 @@ let playerChoice = function(playerObjects){
     Object.entries(playerObjects).forEach(([name, player]) => {
         let move = player.playerMove();
         updateGameBoard(player, move);
-        
-        if(player.getSymbol() === "o"){
-            continueGame();
-        }
+        checkVictory();
     });
+    continueGame();
 }
 
 let updateGameBoard = function(player, playerMove){
@@ -81,24 +79,34 @@ let updateGameBoard = function(player, playerMove){
 }
 
 let continueGame = function(){
+    console.log(gameBoard.gameBoardArray);
     checkVictory();
     playerChoice({playerOne, playerTwo});
 }
 
 let checkVictory = function(){
-    let gameBoardRowCount = gameBoard.gameBoardArray.length;
-
     gameBoard.gameBoardArray.forEach(gameBoardRow => {
         let getRowSymbols = Object.values(gameBoardRow).slice(1);
         if(getRowSymbols.every(entry => entry === playerOne.getSymbol())){
             playerOne.increasePlayerPoints();
             console.log(playerOne.victory());
             console.log(playerOne.getPlayerScore());
+            regenerateGameBoard();
         } else if(getRowSymbols.every(entry => entry === playerTwo.getSymbol())){
             playerTwo.increasePlayerPoints();
             console.log(playerTwo.victory());
             console.log(playerTwo.getPlayerScore());
+            regenerateGameBoard();
         }
+    });
+}
+
+let regenerateGameBoard = function(){
+    gameBoard.gameBoardArray.forEach(object => {
+        let objectKeys = Object.keys(object).slice(1);
+        objectKeys.forEach(key => {
+            object[key] = "";
+        })
     });
 }
 
