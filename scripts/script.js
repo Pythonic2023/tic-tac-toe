@@ -28,7 +28,7 @@ const playerFactory = function(name) {
     }
 
     let playerMove = function() {
-        let move = prompt("Pick move: row 1, 2 or 3 then a, b or c. For example 1a.");
+        let move = prompt(`${getPlayerName()}\n${getPlayerScore()}\nPick move: row 1, 2 or 3 then a, b or c. For example 1a.`);
         return move;
     }
 
