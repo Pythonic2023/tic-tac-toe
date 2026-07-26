@@ -32,6 +32,11 @@ const playerFactory = function(name) {
         return move;
     }
 
+    let retryMove = function(){
+        let move = prompt(`${playerOne.getPlayerName()} has already picked this spot!`);
+        return move;
+    }
+
     let victory = function(){
         let nameToUpperCase = name.toUpperCase();
         return `${nameToUpperCase} is the winner with ${score} points!`;
@@ -53,6 +58,7 @@ const playerFactory = function(name) {
         playerMove,
         getSymbol,
         setSymbol,
+        retryMove,
     }
 }
 
@@ -74,7 +80,9 @@ let updateGameBoard = function(player, playerMove){
     if(gameBoard.gameBoardArray[arrayIndexOffset][cell] === ""){
         gameBoard.gameBoardArray[arrayIndexOffset][cell] = player.getSymbol();
     } else {
-        console.log("Already taken"); // Get players choice again. 
+        let retryChoice = player.retryMove();
+        updateGameBoard(player, retryChoice);
+        continueGame();
     }
 }
 
