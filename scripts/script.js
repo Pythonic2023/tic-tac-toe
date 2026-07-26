@@ -32,8 +32,8 @@ const playerFactory = function(name) {
         return move;
     }
 
-    let retryMove = function(){
-        let move = prompt(`${playerOne.getPlayerName()} has already picked this spot!`);
+    let retryMove = function(player){
+        let move = prompt(`Spot has been taken!`);  
         return move;
     }
 
@@ -80,7 +80,7 @@ let updateGameBoard = function(player, playerMove){
     if(gameBoard.gameBoardArray[arrayIndexOffset][cell] === ""){
         gameBoard.gameBoardArray[arrayIndexOffset][cell] = player.getSymbol();
     } else {
-        let retryChoice = player.retryMove();
+        let retryChoice = player.retryMove(player);
         updateGameBoard(player, retryChoice);
         continueGame();
     }
