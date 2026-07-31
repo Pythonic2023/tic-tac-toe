@@ -9,7 +9,6 @@ let gameBoard = (function(){
     return {gameBoardArray};
 })();
 
-// Create player objects
 const playerFactory = function(name) {
     let score = 0;
     let symbol = ""
@@ -66,7 +65,6 @@ let playerOne = playerFactory("Bobby");
 let playerTwo = playerFactory("ybboB");
 
 let playerChoice = function(playerObjects, retry){
-    console.log(playerObjects);
     if(Object.keys(playerObjects).length === 1 && retry === true){
         Object.entries(playerObjects).forEach(([name, player]) => {
             let move = player.retryMove(player.getPlayerName());
@@ -88,12 +86,6 @@ let playerChoice = function(playerObjects, retry){
 
 }
 
-/*
-    The bug happens in this function. I guess we shall say starts in this function.
-    The reason being if playerA picks a cell playerB has chosen, playerA retry's move. Once an empty cell has been picked,
-    the continueGame method has been called, which then calls player choice with the first player object, playerA, coming first.
-    We have to manipulate this order depending on whether playerA just made a move or not. 
-*/
 let updateGameBoard = function(player, playerMove){
     let [row, cell] = playerMove;
     const arrayIndexOffset = row - 1;
@@ -103,7 +95,7 @@ let updateGameBoard = function(player, playerMove){
     } else {
         console.table(gameBoard.gameBoardArray);
         playerChoice((player.getSymbol() === "x") ? {playerOne} : {playerTwo}, true);
-    } // Have to pass object (!duh) to playerchoice. Create new function to retry choice with a new prompt.
+    }
 }
 
 let continueGame = function(newRound, player){
@@ -126,6 +118,8 @@ let checkVictory = function(){
             regenerateGameBoard();
         }
     });
+    let res = gameBoard.gameBoardArray.every(object => object.a === playerOne.getSymbol()); // Works, now iterate through every column.
+    console.log(res);
 }
 
 let regenerateGameBoard = function(){
