@@ -32,6 +32,11 @@ const playerFactory = function(name) {
         return move;
     }
 
+    let retryMove = function(name){
+        let move = prompt(`Name: ${name}\nCell picked already! Pick again.`);
+        return move;
+    }
+
     let victory = function(){
         let nameToUpperCase = name.toUpperCase();
         return `${nameToUpperCase} is the winner with ${score} points!`;
@@ -53,32 +58,55 @@ const playerFactory = function(name) {
         playerMove,
         getSymbol,
         setSymbol,
+        retryMove,
     }
 }
 
 let playerOne = playerFactory("Bobby");
 let playerTwo = playerFactory("ybboB");
 
-let playerChoice = function(playerObjects){
+let playerChoice = function(playerObjects, retry){
+    console.log(playerObjects);
+    if(Object.keys(playerObjects).length === 1 && retry === true){
+        Object.entries(playerObjects).forEach(([name, player]) => {
+            let move = player.retryMove(player.getPlayerName());
+            updateGameBoard(player, move);
+            if(player.getSymbol() === "x"){
+                playerChoice({playerTwo});
+            } else if(player.getSymbol() === "o"){
+                playerChoice({playerOne});
+            }
+        });
+    }
     Object.entries(playerObjects).forEach(([name, player]) => {
         let move = player.playerMove();
         updateGameBoard(player, move);
         checkVictory();
     });
     continueGame();
+
+
 }
 
+/*
+    The bug happens in this function. I guess we shall say starts in this function.
+    The reason being if playerA picks a cell playerB has chosen, playerA retry's move. Once an empty cell has been picked,
+    the continueGame method has been called, which then calls player choice with the first player object, playerA, coming first.
+    We have to manipulate this order depending on whether playerA just made a move or not. 
+*/
 let updateGameBoard = function(player, playerMove){
     let [row, cell] = playerMove;
     const arrayIndexOffset = row - 1;
     if(gameBoard.gameBoardArray[arrayIndexOffset][cell] === ""){
         gameBoard.gameBoardArray[arrayIndexOffset][cell] = player.getSymbol();
+        console.table(gameBoard.gameBoardArray);
     } else {
-        console.log("Already taken"); // Get players choice again. 
-    }
+        console.table(gameBoard.gameBoardArray);
+        playerChoice((player.getSymbol() === "x") ? {playerOne} : {playerTwo}, true);
+    } // Have to pass object (!duh) to playerchoice. Create new function to retry choice with a new prompt.
 }
 
-let continueGame = function(){
+let continueGame = function(newRound, player){
     checkVictory();
     playerChoice({playerOne, playerTwo});
 }
