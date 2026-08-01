@@ -104,22 +104,33 @@ let continueGame = function(newRound, player){
 }
 
 let checkVictory = function(){
+    
+    let gameWinner = function(player){
+        player.increasePlayerPoints();
+        console.log(player.victory());
+        console.log(player.getPlayerScore());
+        regenerateGameBoard();
+    }
     gameBoard.gameBoardArray.forEach(gameBoardRow => {
         let getRowSymbols = Object.values(gameBoardRow).slice(1);
         if(getRowSymbols.every(entry => entry === playerOne.getSymbol())){
-            playerOne.increasePlayerPoints();
-            console.log(playerOne.victory());
-            console.log(playerOne.getPlayerScore());
-            regenerateGameBoard();
+           gameWinner(playerOne);
         } else if(getRowSymbols.every(entry => entry === playerTwo.getSymbol())){
-            playerTwo.increasePlayerPoints();
-            console.log(playerTwo.victory());
-            console.log(playerTwo.getPlayerScore());
-            regenerateGameBoard();
+            gameWinner(playerTwo);
         }
     });
-    let res = gameBoard.gameBoardArray.every(object => object.a === playerOne.getSymbol()); // Works, now iterate through every column.
-    console.log(res);
+
+    let columnKey = ["a", "b", "c"];
+    columnKey.forEach(key => {
+        let playerOneColumnCheck = gameBoard.gameBoardArray.every(object => object[key] === playerOne.getSymbol());
+        let playerTwoColumnCheck = gameBoard.gameBoardArray.every(object => object[key] === playerTwo.getSymbol());
+        if(playerOneColumnCheck === true){
+            gameWinner(playerOne);
+        } else if(playerTwoColumnCheck === true){
+            gameWinner(playerTwo);
+        }
+    });
+
 }
 
 let regenerateGameBoard = function(){
