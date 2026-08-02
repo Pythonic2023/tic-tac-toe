@@ -103,8 +103,25 @@ let continueGame = function(newRound, player){
     playerChoice({playerOne, playerTwo});
 }
 
-let checkVictory = function(){
-    
+let checkVictory = function(){    
+    /*
+        For each object i have to make sure all their elements are not empty. If they are all taken up by symbols we must restart game.
+    */
+    let isTie = function(){
+        let res = gameBoard.gameBoardArray.every(entry => {
+            let symbols = Object.values(entry).slice(1);
+            return symbols.every(symbol => symbol === "x" || symbol === "o");
+        });
+
+        if(res === true){
+            alert("Tie! reseting gameboard...");
+            regenerateGameBoard();
+        }
+    }
+
+    isTie();
+
+
     let gameWinner = function(player){
         player.increasePlayerPoints();
         console.log(player.victory());
@@ -119,7 +136,6 @@ let checkVictory = function(){
             gameWinner(playerTwo);
         }
     });
-
     let columnKey = ["a", "b", "c"];
     columnKey.forEach(key => {
         let playerOneColumnCheck = gameBoard.gameBoardArray.every(object => object[key] === playerOne.getSymbol());
@@ -130,7 +146,6 @@ let checkVictory = function(){
             gameWinner(playerTwo);
         }
     });
-
 }
 
 let regenerateGameBoard = function(){
