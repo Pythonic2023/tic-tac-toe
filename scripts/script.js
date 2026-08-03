@@ -119,9 +119,6 @@ let checkVictory = function(){
         }
     }
 
-    isTie();
-
-
     let gameWinner = function(player){
         player.increasePlayerPoints();
         console.log(player.victory());
@@ -146,6 +143,8 @@ let checkVictory = function(){
             gameWinner(playerTwo);
         }
     });
+
+    isTie();
 }
 
 let regenerateGameBoard = function(){
