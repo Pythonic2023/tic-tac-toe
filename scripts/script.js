@@ -9,7 +9,6 @@ let gameBoard = (function(){
     return {gameBoardArray};
 })();
 
-// Create player objects
 const playerFactory = function(name) {
     let score = 0;
     let symbol = ""
@@ -66,7 +65,6 @@ let playerOne = playerFactory("Bobby");
 let playerTwo = playerFactory("ybboB");
 
 let playerChoice = function(playerObjects, retry){
-    console.log(playerObjects);
     if(Object.keys(playerObjects).length === 1 && retry === true){
         Object.entries(playerObjects).forEach(([name, player]) => {
             let move = player.retryMove(player.getPlayerName());
@@ -88,12 +86,6 @@ let playerChoice = function(playerObjects, retry){
 
 }
 
-/*
-    The bug happens in this function. I guess we shall say starts in this function.
-    The reason being if playerA picks a cell playerB has chosen, playerA retry's move. Once an empty cell has been picked,
-    the continueGame method has been called, which then calls player choice with the first player object, playerA, coming first.
-    We have to manipulate this order depending on whether playerA just made a move or not. 
-*/
 let updateGameBoard = function(player, playerMove){
     let [row, cell] = playerMove;
     const arrayIndexOffset = row - 1;
@@ -103,7 +95,7 @@ let updateGameBoard = function(player, playerMove){
     } else {
         console.table(gameBoard.gameBoardArray);
         playerChoice((player.getSymbol() === "x") ? {playerOne} : {playerTwo}, true);
-    } // Have to pass object (!duh) to playerchoice. Create new function to retry choice with a new prompt.
+    }
 }
 
 let continueGame = function(newRound, player){
@@ -111,21 +103,48 @@ let continueGame = function(newRound, player){
     playerChoice({playerOne, playerTwo});
 }
 
-let checkVictory = function(){
+let checkVictory = function(){    
+    /*
+        For each object i have to make sure all their elements are not empty. If they are all taken up by symbols we must restart game.
+    */
+    let isTie = function(){
+        let res = gameBoard.gameBoardArray.every(entry => {
+            let symbols = Object.values(entry).slice(1);
+            return symbols.every(symbol => symbol === "x" || symbol === "o");
+        });
+
+        if(res === true){
+            alert("Tie! reseting gameboard...");
+            regenerateGameBoard();
+        }
+    }
+
+    let gameWinner = function(player){
+        player.increasePlayerPoints();
+        console.log(player.victory());
+        console.log(player.getPlayerScore());
+        regenerateGameBoard();
+    }
     gameBoard.gameBoardArray.forEach(gameBoardRow => {
         let getRowSymbols = Object.values(gameBoardRow).slice(1);
         if(getRowSymbols.every(entry => entry === playerOne.getSymbol())){
-            playerOne.increasePlayerPoints();
-            console.log(playerOne.victory());
-            console.log(playerOne.getPlayerScore());
-            regenerateGameBoard();
+           gameWinner(playerOne);
         } else if(getRowSymbols.every(entry => entry === playerTwo.getSymbol())){
-            playerTwo.increasePlayerPoints();
-            console.log(playerTwo.victory());
-            console.log(playerTwo.getPlayerScore());
-            regenerateGameBoard();
+            gameWinner(playerTwo);
         }
     });
+    let columnKey = ["a", "b", "c"];
+    columnKey.forEach(key => {
+        let playerOneColumnCheck = gameBoard.gameBoardArray.every(object => object[key] === playerOne.getSymbol());
+        let playerTwoColumnCheck = gameBoard.gameBoardArray.every(object => object[key] === playerTwo.getSymbol());
+        if(playerOneColumnCheck === true){
+            gameWinner(playerOne);
+        } else if(playerTwoColumnCheck === true){
+            gameWinner(playerTwo);
+        }
+    });
+
+    isTie();
 }
 
 let regenerateGameBoard = function(){
