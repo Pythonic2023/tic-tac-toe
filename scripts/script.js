@@ -86,12 +86,24 @@ let playerChoice = function(playerObjects, retry){
 
 }
 
+// We will use the update gameboard function with our display Object to update our page with a symbol.
+
+let displayObject = {
+    updateDisplay: function(playerSymbol, coords){
+        let reverseCoords = coords.split("").reverse().join("");
+        let prependDecimalReverseCoords = "." + reverseCoords;
+        let elementToUpdate = document.querySelector(prependDecimalReverseCoords);
+        elementToUpdate.textContent = playerSymbol;
+    },
+}
+
 let updateGameBoard = function(player, playerMove){
     let [row, cell] = playerMove;
     const arrayIndexOffset = row - 1;
     if(gameBoard.gameBoardArray[arrayIndexOffset][cell] === ""){
         gameBoard.gameBoardArray[arrayIndexOffset][cell] = player.getSymbol();
         console.table(gameBoard.gameBoardArray);
+        displayObject.updateDisplay(player.getSymbol(), playerMove);
     } else {
         console.table(gameBoard.gameBoardArray);
         playerChoice((player.getSymbol() === "x") ? {playerOne} : {playerTwo}, true);
@@ -104,9 +116,7 @@ let continueGame = function(newRound, player){
 }
 
 let checkVictory = function(){    
-    /*
-        For each object i have to make sure all their elements are not empty. If they are all taken up by symbols we must restart game.
-    */
+
     let isTie = function(){
         let res = gameBoard.gameBoardArray.every(entry => {
             let symbols = Object.values(entry).slice(1);
