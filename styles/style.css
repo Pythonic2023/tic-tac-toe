@@ -21,4 +21,6 @@ body {
 
  .cella,.cellb, .cellc {
     border: 1px solid black;
+    font-size: 8rem;
+    text-align: center;
 }

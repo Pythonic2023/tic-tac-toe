@@ -82,20 +82,23 @@ let playerChoice = function(playerObjects, retry){
         checkVictory();
     });
     continueGame();
-
-
 }
-
-// We will use the update gameboard function with our display Object to update our page with a symbol.
 
 let displayObject = {
-    updateDisplay: function(playerSymbol, coords){
-        let reverseCoords = coords.split("").reverse().join("");
-        let prependDecimalReverseCoords = "." + reverseCoords;
-        let elementToUpdate = document.querySelector(prependDecimalReverseCoords);
-        elementToUpdate.textContent = playerSymbol;
+    updateDisplay: function(gameBoardArray){
+       gameBoardArray.forEach(object => {
+            let objectRow = object.row;
+            let entries = Object.entries(object);
+            entries.forEach(entry => {
+                if(entry[1] != "" && entry[0] != "row"){
+                    const selectedElement = document.querySelector("." + entry[0] + objectRow);
+                    selectedElement.textContent = entry[1];
+                }
+
+            });
+       })
     },
-}
+};
 
 let updateGameBoard = function(player, playerMove){
     let [row, cell] = playerMove;
@@ -103,7 +106,7 @@ let updateGameBoard = function(player, playerMove){
     if(gameBoard.gameBoardArray[arrayIndexOffset][cell] === ""){
         gameBoard.gameBoardArray[arrayIndexOffset][cell] = player.getSymbol();
         console.table(gameBoard.gameBoardArray);
-        displayObject.updateDisplay(player.getSymbol(), playerMove);
+        displayObject.updateDisplay(gameBoard.gameBoardArray);
     } else {
         console.table(gameBoard.gameBoardArray);
         playerChoice((player.getSymbol() === "x") ? {playerOne} : {playerTwo}, true);
@@ -112,7 +115,9 @@ let updateGameBoard = function(player, playerMove){
 
 let continueGame = function(newRound, player){
     checkVictory();
-    playerChoice({playerOne, playerTwo});
+    setTimeout(() => {
+        playerChoice({playerOne, playerTwo});
+    }, 2000);
 }
 
 let checkVictory = function(){    
