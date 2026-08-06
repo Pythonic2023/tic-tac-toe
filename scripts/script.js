@@ -64,17 +64,9 @@ const playerFactory = function(name) {
 let playerOne = playerFactory("Bobby");
 let playerTwo = playerFactory("ybboB");
 
-let playerChoice = function(playerObjects, retry){
-    if(Object.keys(playerObjects).length === 1 && retry === true){
-        Object.entries(playerObjects).forEach(([name, player]) => {
-            let move = player.retryMove(player.getPlayerName());
-            updateGameBoard(player, move);
-            if(player.getSymbol() === "x"){
-                playerChoice({playerTwo});
-            } else if(player.getSymbol() === "o"){
-                playerChoice({playerOne});
-            }
-        });
+let playerChoice = function(playerObjects){
+    if(Object.keys(playerObjects).length === 1){
+        playerRetryMove(playerObjects);
     }
     Object.entries(playerObjects).forEach(([name, player]) => {
         let move = player.playerMove();
@@ -82,9 +74,39 @@ let playerChoice = function(playerObjects, retry){
         checkVictory();
     });
     continueGame();
+}
 
+let playerRetryMove = function(playerObjects) {
+    console.log(playerObjects);
+    let callRetryMethod = function(object){
+        let move = object.retryMove(object.getPlayerName());
+        console.log(move);
+        updateGameBoard(object, move);
+    }
+
+    if(playerObjects.playerOne){
+        callRetryMethod(playerObjects.playerOne);
+    } else {
+        callRetryMethod(playerObjects.playerTwo);
+    }
 
 }
+
+let displayObject = {
+    updateDisplay: function(gameBoardArray){
+       gameBoardArray.forEach(object => {
+            let objectRow = object.row;
+            let entries = Object.entries(object);
+            entries.forEach(entry => {
+                if(entry[1] != "" && entry[0] != "row"){
+                    const selectedElement = document.querySelector("." + entry[0] + objectRow);
+                    selectedElement.textContent = entry[1];
+                }
+
+            });
+       });
+    },
+};
 
 let updateGameBoard = function(player, playerMove){
     let [row, cell] = playerMove;
@@ -92,21 +114,26 @@ let updateGameBoard = function(player, playerMove){
     if(gameBoard.gameBoardArray[arrayIndexOffset][cell] === ""){
         gameBoard.gameBoardArray[arrayIndexOffset][cell] = player.getSymbol();
         console.table(gameBoard.gameBoardArray);
+        displayObject.updateDisplay(gameBoard.gameBoardArray);
     } else {
         console.table(gameBoard.gameBoardArray);
-        playerChoice((player.getSymbol() === "x") ? {playerOne} : {playerTwo}, true);
+        if(player.getSymbol() === "x"){
+            playerRetryMove({playerOne});
+        } else {
+            playerRetryMove({playerTwo});
+        }
     }
 }
 
 let continueGame = function(newRound, player){
     checkVictory();
-    playerChoice({playerOne, playerTwo});
+    setTimeout(() => {
+        playerChoice({playerOne, playerTwo});
+    }, 2000);
 }
 
 let checkVictory = function(){    
-    /*
-        For each object i have to make sure all their elements are not empty. If they are all taken up by symbols we must restart game.
-    */
+
     let isTie = function(){
         let res = gameBoard.gameBoardArray.every(entry => {
             let symbols = Object.values(entry).slice(1);
