@@ -64,17 +64,9 @@ const playerFactory = function(name) {
 let playerOne = playerFactory("Bobby");
 let playerTwo = playerFactory("ybboB");
 
-let playerChoice = function(playerObjects, retry){
-    if(Object.keys(playerObjects).length === 1 && retry === true){
-        Object.entries(playerObjects).forEach(([name, player]) => {
-            let move = player.retryMove(player.getPlayerName());
-            updateGameBoard(player, move);
-            if(player.getSymbol() === "x"){
-                playerChoice({playerTwo});
-            } else if(player.getSymbol() === "o"){
-                playerChoice({playerOne});
-            }
-        });
+let playerChoice = function(playerObjects){
+    if(Object.keys(playerObjects).length === 1){
+        playerRetryMove(playerObjects);
     }
     Object.entries(playerObjects).forEach(([name, player]) => {
         let move = player.playerMove();
@@ -82,6 +74,22 @@ let playerChoice = function(playerObjects, retry){
         checkVictory();
     });
     continueGame();
+}
+
+let playerRetryMove = function(playerObjects) {
+    console.log(playerObjects);
+    let callRetryMethod = function(object){
+        let move = object.retryMove(object.getPlayerName());
+        console.log(move);
+        updateGameBoard(object, move);
+    }
+
+    if(playerObjects.playerOne){
+        callRetryMethod(playerObjects.playerOne);
+    } else {
+        callRetryMethod(playerObjects.playerTwo);
+    }
+
 }
 
 let displayObject = {
@@ -96,7 +104,7 @@ let displayObject = {
                 }
 
             });
-       })
+       });
     },
 };
 
@@ -109,7 +117,11 @@ let updateGameBoard = function(player, playerMove){
         displayObject.updateDisplay(gameBoard.gameBoardArray);
     } else {
         console.table(gameBoard.gameBoardArray);
-        playerChoice((player.getSymbol() === "x") ? {playerOne} : {playerTwo}, true);
+        if(player.getSymbol() === "x"){
+            playerRetryMove({playerOne});
+        } else {
+            playerRetryMove({playerTwo});
+        }
     }
 }
 
