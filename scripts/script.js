@@ -1,7 +1,34 @@
+// Event listener.
+let gameBoardSelector = document.querySelector(".gameboard");
+gameBoardSelector.addEventListener('click', function(e){
+    clickedCell(e);
+});
+
+let isEven = function(round){
+    console.log("entered iseven")
+    console.log(roundCount)
+    if(roundCount % 2 === 0){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+let clickedCell = function(e){
+    console.log(e.target.className);
+    console.log(e.target);
+    if(e.target.textContent === "" && isEven(roundCount)){
+        e.target.textContent = "x";
+    } else if(e.target.textContent === ""){
+        e.target.textContent = "o";
+    }
+    roundCount += 1;
+} // Update gameboard array now, as it properly shows alternating x's and o's. Call checkvictory to check victory after former complete. 
+  // A call to update gameboard with player object and a class property should do the trick for updating gameboard.
+let roundCount = 1;
 // Make gameboard a IIFE so another instance cannot be made.
 let gameBoard = (function(){
     const gameBoardArray = []
-
     for(let i = 1; i < 4; i++){
         gameBoardArray.push({row: i, a:"", b:"", c: ""});
     }
@@ -189,5 +216,5 @@ let startGame = (function(){
     console.log("Welcome to Tic Tac Toe!")
     console.log(`${playerOne.getPlayerName()} Symbol: ${playerOne.getSymbol()}`);
     console.log(`${playerTwo.getPlayerName()} Symbol: ${playerTwo.getSymbol()}`);
-    playerChoice({playerOne, playerTwo});
+    //playerChoice({playerOne, playerTwo});
 }());
