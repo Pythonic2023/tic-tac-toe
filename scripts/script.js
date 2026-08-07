@@ -15,14 +15,19 @@ let isEven = function(round){
 }
 
 let clickedCell = function(e){
-    console.log(e.target.className);
+    console.log(`Last two letters: ${e.target.className.slice(-2).split('').reverse().join("")}`);
     console.log(e.target);
     if(e.target.textContent === "" && isEven(roundCount)){
-        e.target.textContent = "x";
-    } else if(e.target.textContent === ""){
         e.target.textContent = "o";
+        let pickedElement = e.target.className.slice(-2).split('').reverse().join("");
+        updateGameBoard(playerTwo, pickedElement);
+    } else if(e.target.textContent === ""){
+        e.target.textContent = "x";
+        let pickedElement = e.target.className.slice(-2).split('').reverse().join("");
+        updateGameBoard(playerOne, pickedElement);
     }
     roundCount += 1;
+    checkVictory();
 } // Update gameboard array now, as it properly shows alternating x's and o's. Call checkvictory to check victory after former complete. 
   // A call to update gameboard with player object and a class property should do the trick for updating gameboard.
 let roundCount = 1;
@@ -177,6 +182,8 @@ let checkVictory = function(){
         player.increasePlayerPoints();
         console.log(player.victory());
         console.log(player.getPlayerScore());
+        alert(player.victory());
+        alert(player.getPlayerScore());
         regenerateGameBoard();
     }
     gameBoard.gameBoardArray.forEach(gameBoardRow => {
@@ -208,7 +215,7 @@ let regenerateGameBoard = function(){
             object[key] = "";
         });
     });
-    playerChoice({playerOne, playerTwo});
+    //playerChoice({playerOne, playerTwo});
 }
 
 let startGame = (function(){
