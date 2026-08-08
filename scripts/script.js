@@ -15,19 +15,37 @@ let isEven = function(round){
 }
 
 let clickedCell = function(e){
-    console.log(`Last two letters: ${e.target.className.slice(-2).split('').reverse().join("")}`);
-    console.log(e.target);
+
+    let updateClickedCell = function(player, pickedElement){
+        if(player.getSymbol() === "o"){
+            player = playerTwo;
+        } else {
+            player = playerOne;
+        }
+        updateGameBoard(player, pickedElement);
+        roundCount += 1;
+        checkVictory();
+        let alreadyPickedElement = document.querySelector('.alreadyPicked');
+        alreadyPickedElement.remove();
+        checkVictory();
+    }
+
     if(e.target.textContent === "" && isEven(roundCount)){
         e.target.textContent = "o";
         let pickedElement = e.target.className.slice(-2).split('').reverse().join("");
-        updateGameBoard(playerTwo, pickedElement);
+        updateClickedCell(playerTwo, pickedElement);
     } else if(e.target.textContent === ""){
         e.target.textContent = "x";
         let pickedElement = e.target.className.slice(-2).split('').reverse().join("");
-        updateGameBoard(playerOne, pickedElement);
+        updateClickedCell(playerOne, pickedElement);
+    } else {
+        let gameTitle = document.querySelector("h1");
+        let alreadyPickedMessage = document.createElement('p');
+        alreadyPickedMessage.classList.add("alreadyPicked");
+        alreadyPickedMessage.textContent = "Already picked!";
+        gameTitle.append(alreadyPickedMessage);
     }
-    roundCount += 1;
-    checkVictory();
+
 } // Update gameboard array now, as it properly shows alternating x's and o's. Call checkvictory to check victory after former complete. 
   // A call to update gameboard with player object and a class property should do the trick for updating gameboard.
 let roundCount = 1;
@@ -216,6 +234,8 @@ let regenerateGameBoard = function(){
         });
     });
     //playerChoice({playerOne, playerTwo});
+    let gameBoardElements = document.querySelectorAll("div"); // loop through with a foreach to remove.
+    console.log(gameBoardElements);
 }
 
 let startGame = (function(){
